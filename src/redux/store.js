@@ -1,10 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit';
-import dataReducer from './dataSlice'; // Assuming you will have a data slice for managing the sheet data
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import dataReducer from "./dataSlice";
+
+const persistConfig = {
+  key: "root",
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, dataReducer);
 
 const store = configureStore({
   reducer: {
-    data: dataReducer,
+    data: persistedReducer,
   },
 });
 
+export const persistor = persistStore(store);
 export default store;
